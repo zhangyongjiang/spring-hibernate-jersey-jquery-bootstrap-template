@@ -9,7 +9,7 @@ public class StandaloneServer {
         jetty.setPort(9080);
         JettyWebAppContext jwac = new JettyWebAppContext();
         jwac.setContextPath("/test");
-        jwac.setExtraClassPath("./src/main/resources/latest_demo,./src/main/resources/shared");
+        jwac.setExtraClassPath("./src/main/resources/prod,./src/main/resources/shared");
         jetty.addWebAppContext(jwac.getWebAppContext());
         jetty.start();
         jetty.join();

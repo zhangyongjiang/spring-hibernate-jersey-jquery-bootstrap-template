@@ -2,7 +2,10 @@
 %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"
 %><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"
 %><%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"
-%><!DOCTYPE html>
+%><%
+	request.getRequestDispatcher("/ws/user/me?format=object&var=me").include(request, response);
+%>
+<!DOCTYPE html>
 <html>
   <head>
     <title><jsp:include page="title.jsp.oo"></jsp:include></title>
@@ -23,6 +26,7 @@
   <body>
     <div class="container">
             <jsp:include page="header.jsp.oo"></jsp:include>
+            <div style="margin:16px;height:1px;"></div>
             <jsp:include page="content.jsp.oo"></jsp:include>
     </div>
 
@@ -30,6 +34,11 @@
     <script src='<c:url value="/scripts/json2.js"/>'></script>
     <script src='<c:url value="/bootstrap/js/bootstrap.min.js"/>'></script>
     <script type="text/javascript">
+	    <%String contextPath = request.getContextPath();
+	    if(contextPath.equals("/"))
+	        contextPath = "";
+	    %>
+	    serverBase = '<%=contextPath %>';
     	<jsp:include page="page-script.jsp.oo"></jsp:include>
     </script>
   </body>
