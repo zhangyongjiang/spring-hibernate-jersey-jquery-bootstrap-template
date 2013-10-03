@@ -1,6 +1,9 @@
 package demo.rest;
 
-import org.junit.Assert;
+import java.util.UUID;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import common.util.web.SpringResourceTester;
@@ -9,14 +12,22 @@ import demo.entity.User;
 
 public class RestUserTest extends SpringResourceTester {
 	@Test
-	public void testSignupAndGet() {
+	public void testRestUser() {
 		User user = new User();
-		user.setFirstName(getCurrentTimeMillisString());
-		user.setLastName(getCurrentTimeMillisString());
-		User saved = getBuilder("/ws/user/signup").post(User.class, user);
-		Assert.assertNotNull(saved.getId());
-		User db = getBuilder("/ws/user", "userId", saved.getId()).get(User.class);
-		Assert.assertEquals(user.getFirstName(), db.getFirstName());
-		Assert.assertEquals(user.getLastName(), db.getLastName());
+		user.setFirstName(UUID.randomUUID().toString());
+		user.setLastName(UUID.randomUUID().toString());
+		user.setId(UUID.randomUUID().toString());
+		user.setPassword(UUID.randomUUID().toString());
+		User created = getBuilder("/ws/user/signup").post(User.class, user);
+		
+		User login = new User();
+		login.setId(user.getId());
+		login.setPassword(user.getPassword());
+		getBuilder("/ws/user/login").post(login);
+		
+		User me = getBuilder("/ws/user/me").get(User.class);
+		Assert.assertEquals(user.getId(), me.getId());
+		Assert.assertEquals(user.getFirstName(), me.getFirstName());
+		Assert.assertEquals(user.getLastName(), me.getLastName());
 	}
 }
